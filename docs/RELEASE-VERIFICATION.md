@@ -1,6 +1,6 @@
-# 1.0.0 / Publication preparation
+# 1.0.0 / Release verification
 
-Verified on **30 September 2026 (Asia/Dubai)**. GitHub publication is pending the owner's network restoration; no repository or public Release is claimed here.
+Verified on **30 September 2026 (Asia/Dubai)**. The audited source has been pushed to [ChefDavid0815/nerf-research-console](https://github.com/ChefDavid0815/nerf-research-console). The following checks describe the software and source archive; formal release and live-site checks are recorded in the publication record.
 
 | Check | Result and scope |
 | :--- | :--- |
@@ -19,4 +19,4 @@ The source-only checkout used the existing installed Python interpreter, rather 
 
 The scientific model, ray, sampling, renderer and training logic were not refactored. Historical run files were only read for evidence export. The website's volume points, rays and vector cover are editorial geometry; reconstructed RGB plates and metrics are recorded outputs.
 
-Public network operations, metadata, source push and Release URL verification will be completed after the owner reports that GitHub access is restored. The portfolio code is locally prepared; production hosting has not been changed as part of this deferred release.
+The source edition keeps the existing model and research conventions. Website and Release identities will be added to the publication record after their live verification.
