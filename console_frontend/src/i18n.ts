@@ -1,0 +1,442 @@
+import { useSyncExternalStore } from 'react'
+
+export type Language = 'zh' | 'en'
+export type TranslationParams = Record<string, string | number>
+
+const STORAGE_KEY = 'nerf-console-language'
+
+// Source-language strings are stable keys so existing JSX can be translated
+// without changing scientific IDs, dataset values, or backend artifact text.
+export const english: Record<string, string> = {
+  '总览': 'Overview',
+  '系统概览': 'System overview',
+  '实验': 'Experiment',
+  '新建实验': 'New experiment',
+  '当前运行': 'Active run',
+  '分析': 'Analysis',
+  '重建视图': 'Reconstruction',
+  '指标曲线': 'Metrics',
+  '分层采样': 'Hierarchical sampling',
+  '运行对比': 'Compare runs',
+  '位置编码': 'Positional encoding',
+  '数据': 'Data',
+  '场景与相机': 'Scenes and cameras',
+  '运行档案': 'Run archive',
+  '检查点': 'Checkpoints',
+  '系统': 'System',
+  'GPU 与系统': 'GPU and system',
+  '日志': 'Logs',
+  '设置': 'Settings',
+  '总损失': 'Total loss',
+  'Fine PSNR · 训练批次': 'Fine PSNR · training batch',
+  'GPU 使用率': 'GPU utilization',
+  'LPIPS · 全图': 'LPIPS · full image',
+  'SSIM · 全图': 'SSIM · full image',
+  '验证 PSNR': 'Validation PSNR',
+  '学习率': 'Learning rate',
+  '显存': 'VRAM',
+  '吞吐': 'Throughput',
+  '训练中': 'Training',
+  '已完成': 'Completed',
+  '失败': 'Failed',
+  '已停止': 'Stopped',
+  '排队中': 'Queued',
+  '待启动': 'Ready to start',
+  '评估中': 'Evaluating',
+  '回放': 'Replay',
+  '已导入': 'Imported',
+  '未知': 'Unknown',
+  '暂无数据': 'Not available',
+  '不可用': 'Unavailable',
+  '检查中': 'Checking',
+  '完成': 'Done',
+  '无': 'None',
+  '在线': 'Online',
+  '离线': 'Offline',
+  '回放模式 · 非实时科研训练': 'REPLAY MODE · NOT LIVE SCIENTIFIC TRAINING',
+
+  '启动 NeRF Research Console': 'Starting NeRF Research Console',
+  '读取本地实验档案': 'Loading local experiment records',
+  '检查研究后端连接': 'Checking research backend connection',
+  '定位重建与检查点': 'Locating reconstructions and checkpoints',
+  '连接遥测与事件通道': 'Connecting telemetry and event stream',
+  '神经辐射场研究控制台 · 科学渲染与位置编码分析': 'Neural radiance field research console · scientific rendering and positional encoding analysis',
+  '跳过启动动画': 'Skip boot sequence',
+
+  '没有历史曲线': 'No historical curves',
+  '不适用': 'Not applicable',
+  '分割': 'Split',
+  '单次迭代 · 最近 20 次计算': 'Per iteration · latest 20 calculations',
+  '暂无完整视角评估': 'No full-view evaluation yet',
+  '累计耗时': 'Elapsed time',
+  '视角': 'View',
+  '训练性能与验证': 'Training performance and validation',
+  '训练指标取自 CSV · 验证来自完整视角评估': 'Training metrics come from CSV · validation from full-view evaluation',
+  '评估记录': 'Evaluation records',
+  '重试': 'Retry',
+  '预计剩余': 'Estimated remaining',
+  '验证 PSNR · 全图': 'Validation PSNR · full image',
+  '源自 metrics.csv': 'From metrics.csv',
+  '指标来自运行保存的 CSV；启动真实训练或选择已有运行后在此显示。': 'Metrics come from saved run CSV files. Start training or select an existing run to view them.',
+  '重置视图': 'Reset view',
+  '位置带宽 L': 'Position bandwidth L',
+  '方向带宽 L': 'Direction bandwidth L',
+  '网络结构': 'Network architecture',
+  '位置 MLP 深度': 'Position MLP depth',
+  '位置 MLP 宽度': 'Position MLP width',
+  '跳接层': 'Skip connection layer',
+  '颜色分支宽度': 'Color branch width',
+  '粗采样数': 'Coarse samples',
+  '细采样数': 'Fine samples',
+  '密度初始偏置': 'Initial density bias',
+  '训练设置': 'Training settings',
+  '迭代预算': 'Iteration budget',
+  '批量大小': 'Batch size',
+  '随机种子': 'Random seed',
+  '检查点间隔': 'Checkpoint interval',
+  '预览间隔': 'Preview interval',
+  '渲染分块': 'Render chunk size',
+  '构建新实验': 'Build a new experiment',
+  '使用研究后端提供的配置默认值。启动后参数冻结；修改科学条件需要创建新运行。': 'Defaults come from the research backend. Parameters are frozen on launch; changing scientific conditions requires a new run.',
+  '场景与数据': 'Scene and data',
+  '当前支持 Lego': 'Currently supports Lego',
+  '维度 {dimension} · 最高频带 {band} · include_input = true': 'Dimension {dimension} · highest band {band} · include_input = true',
+  '实验摘要': 'Experiment summary',
+  '启动前确认': 'Review before launch',
+  '位置维度': 'Position dimension',
+  '方向维度': 'Direction dimension',
+  '训练预算': 'Training budget',
+  '这些是新实验默认值。已完成 50k 基线的冻结配置以其运行档案为准。验证间隔目前不可配置；预览间隔仅生成诊断图。完整 PSNR / SSIM / LPIPS 须显式评估检查点。': 'These are new experiment defaults. The completed 50k baseline uses its own frozen run configuration. Validation interval is not configurable; previews are diagnostic images. Full-image PSNR, SSIM and LPIPS require explicit checkpoint evaluation.',
+  '审核并启动': 'Review and start',
+  '无法读取后端默认配置，禁止提交空实验。': 'Backend defaults could not be loaded. An empty experiment cannot be submitted.',
+  '最终实验确认': 'Final experiment review',
+  '关闭': 'Close',
+  '后端将验证配置、生成唯一运行 ID、冻结科学参数并启动真实训练。': 'The backend will validate the configuration, create a unique run ID, freeze scientific parameters and start real training.',
+  '返回修改': 'Back to editing',
+  '提交中…': 'Submitting…',
+  '确认启动真实训练': 'Confirm real training',
+
+  '重建实验室': 'Reconstruction lab',
+  'Ground Truth、Prediction 与绝对差异来自保存的真实渲染文件。': 'Ground truth, prediction and absolute difference come from saved render files.',
+  '尚无重建图像': 'No reconstruction images yet',
+  '运行完成预览或评估后，后端提供的图像会在这里出现。': 'Images from the backend appear here after a preview or evaluation is saved.',
+  '数据分割': 'Dataset split',
+  '视角索引': 'View index',
+  '缩放': 'Zoom',
+  '真实图像': 'Ground truth',
+  '模型预测': 'Prediction',
+  '绝对差异': 'Absolute difference',
+  '真实产物': 'Saved artifact',
+  '视角 {index} 预测': 'Prediction for view {index}',
+  '{label}，{split} 视角 {index}': '{label}, {split} view {index}',
+  '训练时间线': 'Training timeline',
+  '{count} 个检查点': '{count} checkpoints',
+  '验证视角图库': 'Validation view gallery',
+  '点击视角进行对照': 'Select a view to compare',
+  '已从存储文件载入 {count} 条指标记录。下方时间轴支持拖动范围与平移，刷新后从 CSV 恢复。': 'Loaded {count} metric records from storage. Drag the timeline to select or pan a range; refresh restores the CSV history.',
+  '最新记录': 'Latest record',
+  '暂无记录': 'No records yet',
+
+  '搜索运行 ID 或场景': 'Search run ID or scene',
+  '按状态筛选': 'Filter by status',
+  '全部状态': 'All statuses',
+  '排序': 'Sort',
+  '最新优先': 'Newest first',
+  '最早优先': 'Oldest first',
+  'PSNR 高优先': 'Highest PSNR first',
+  '运行': 'Run',
+  '场景': 'Scene',
+  '位置 L': 'Position L',
+  '方向 L': 'Direction L',
+  '种子': 'Seed',
+  '迭代': 'Iterations',
+  '状态': 'Status',
+  '时间': 'Date',
+  '时长': 'Duration',
+  '估算': 'estimated',
+  '{views} 个视角 · {summaries} 条汇总': '{views} views · {summaries} summaries',
+  '最高 PSNR': 'Highest PSNR',
+  '最低 PSNR': 'Lowest PSNR',
+  '最高 SSIM': 'Highest SSIM',
+  '最低 LPIPS': 'Lowest LPIPS',
+  '尚无运行档案': 'No runs yet',
+  '创建实验后，运行会保存在本地研究目录。': 'New experiments are saved in the local research directory.',
+  '没有匹配的运行': 'No matching runs',
+  '尝试清除搜索或状态筛选。': 'Clear the search or status filter.',
+  '已导入基线': 'Imported baseline',
+  '基准运行': 'Baseline run',
+  '对比运行': 'Comparison run',
+  '选择另一运行': 'Choose another run',
+  '选择第二个运行': 'Select a second run',
+  '重建图并排对比': 'Side-by-side reconstruction',
+  '真实保存图像 · 各自检查点': 'Saved images · each run at its checkpoint',
+  '{label} iteration {step} 预测图': '{label} prediction at iteration {step}',
+  '暂无重建图': 'No reconstruction image',
+  '冻结原始预算': 'Original frozen budget',
+  '实际扩展目标': 'Staged target',
+  '参数量': 'Parameter count',
+  '最终迭代': 'Final iteration',
+  '并排呈现测量值与冻结参数，不自动生成科研结论。': 'Measured values and frozen parameters are presented side by side. The console does not draw research conclusions.',
+  '可比较实验配置、评估指标、曲线和保存的重建图像。': 'Compare experiment configurations, evaluation metrics, curves and saved reconstruction images.',
+  '训练曲线叠加 · Fine PSNR': 'Training curve overlay · Fine PSNR',
+  '训练曲线叠加 · 训练批次 PSNR': 'Training curve overlay · training-batch PSNR',
+  '曲线逐点来自两份存储指标；不同迭代预算时请检查横轴范围。': 'Every plotted point comes from saved metrics. Check the horizontal range when budgets differ.',
+
+  '暂无日志': 'No logs yet',
+  '详情': 'Details',
+  '指标': 'Metrics',
+  '重建': 'Reconstruction',
+  '评估': 'Evaluation',
+  '采样': 'Sampling',
+  '产物': 'Artifacts',
+  '{sections}载入失败；其余数据仍可查看。': 'Failed to load {sections}; other data remains available.',
+  '相机数据载入失败：{error}': 'Failed to load camera data: {error}',
+  '回放事件通道无法连接': 'Replay event stream could not connect',
+  '回放事件通道连接超时': 'Replay event stream timed out',
+  '后端已连接': 'Backend connected',
+  '正在连接': 'Connecting',
+  '后端离线': 'Backend offline',
+  '切换菜单': 'Toggle menu',
+  '当前状态': 'Current status',
+  '运行次数': 'Run count',
+  '载入中': 'Loading',
+  '当前迭代': 'Current iteration',
+  '保存指标': 'Saved metrics',
+  '尚无运行': 'No run selected',
+  '进度': 'Progress',
+  '使用率': 'Utilization',
+  '运行控制台': 'Run console',
+  '尚未选择运行': 'No run selected',
+  '后端将评估最新检查点的验证集视角 0': 'The backend will evaluate validation view 0 at the latest checkpoint',
+  '最新保存的模型预测': 'Latest saved prediction',
+  '尚无渲染预览': 'No render preview yet',
+  '存储状态': 'Stored status',
+  '进度暂无数据': 'Progress unavailable',
+  '{percent}% 已完成': '{percent}% complete',
+  '显存已用': 'VRAM used',
+  '暂无检查点': 'No checkpoints yet',
+  '由后端提供经验证的相机位置、前向轴与场景坐标；不会在浏览器重建科学矩阵。': 'Validated camera positions, forward axes and scene coordinates come from the backend; the browser does not reconstruct scientific matrices.',
+  '正在载入 3D 视图': 'Loading 3D view',
+  '相机射线读取失败：{error}': 'Failed to load camera ray: {error}',
+  '所有实验和导入基线的独立审计入口。': 'Independent audit entry for every experiment and the imported baseline.',
+  '检查点管理': 'Checkpoint manager',
+  '从保存记录选择时间点；恢复前由后端校验兼容性。': 'Select a saved iteration; the backend validates compatibility before resuming.',
+  '当前运行暂无检查点': 'This run has no checkpoints',
+  'GPU 与系统诊断': 'GPU and system diagnostics',
+  '由本机后端读取。传感器不支持或权限不足时显示暂无数据。': 'Read from the local backend. Unsupported sensors or missing permissions appear as unavailable.',
+  '利用率': 'Utilization',
+  '显存总量': 'Total VRAM',
+  '训练日志': 'Training logs',
+  '异常、检查点、评估与训练消息均按原文显示。': 'Exceptions, checkpoints, evaluations and training messages are shown verbatim.',
+  '控制台设置': 'Console settings',
+  '仅影响本地界面显示，不修改科学实验配置。': 'These settings affect only the local interface and do not modify scientific experiment configurations.',
+  '启动动画': 'Boot animation',
+  '下次进入本地控制台时播放启动序列。': 'Play the boot sequence next time the local console opens.',
+  '回放模式': 'Replay mode',
+  '重放保存的真实指标，清楚标记为非实时科研训练。': 'Replay saved real metrics, clearly marked as non-live scientific training.',
+  '启动保存数据回放': 'Start saved-data replay',
+  '数据源': 'Data source',
+  '所有运行与产物来自本地 FastAPI；浏览器只负责显示与操作。': 'All runs and artifacts come from local FastAPI; the browser only displays and controls them.',
+  '退出回放': 'Exit replay',
+  '研究系统': 'Research system',
+  '真实训练状态、保存的指标与系统遥测汇聚于此。': 'Real training state, saved metrics and system telemetry in one place.',
+  '查看运行档案': 'View run archive',
+  '当前实验': 'Current experiment',
+  '打开运行控制台': 'Open run console',
+  '训练信号': 'Training signals',
+  '历史 CSV + 实时事件': 'Historical CSV + live events',
+  'GPU 遥测': 'GPU telemetry',
+  '总显存 {memory} · 温度 {temperature}': 'Total VRAM {memory} · temperature {temperature}',
+  '刷新': 'Refresh',
+  '安全停止': 'Stop safely',
+  '校验并恢复': 'Validate and resume',
+  '评估最新检查点 · val[0]': 'Evaluate latest checkpoint · val[0]',
+  '最新渲染预览': 'Latest render preview',
+  '训练进度': 'Training progress',
+  '最新检查点': 'Latest checkpoint',
+  '运行失败 · Traceback': 'Run failed · traceback',
+  '场景数据': 'Scene data',
+  '冻结配置 · {run}': 'Frozen configuration · {run}',
+  '运行清单': 'Run manifest',
+  '软件与硬件环境': 'Software and hardware environment',
+  '可用产物': 'Available artifacts',
+  '查看文件': 'View file',
+  '刷新遥测': 'Refresh telemetry',
+  '运行环境': 'Runtime environment',
+  'GPU 传感器': 'GPU sensors',
+  '刷新日志': 'Refresh logs',
+  '异常追踪': 'Exception traceback',
+
+  '位置编码频谱': 'Positional encoding spectrum',
+  '曲线由 Python 中已验证的 SinusoidalPositionalEncoding 实际输出。': 'Curves come directly from the validated Python SinusoidalPositionalEncoding output.',
+  '位置编码带宽 L': 'Positional encoding bandwidth L',
+  '编码维度': 'Encoded dimension',
+  '最高频带': 'Highest frequency band',
+  '输入约定': 'Input convention',
+  '每个频带增加正弦与余弦基信号；更高 L 加入更细的高频变化。这是编码器输出示意，不是训练测量值。': 'Each band adds sine and cosine basis signals. Higher L adds finer high-frequency variation. This shows encoder output, not a training measurement.',
+  '基信号 · x ∈ [0, 1]': 'Basis signals · x ∈ [0, 1]',
+  '采样位置 x': 'Sample position x',
+  '正在从 Python 编码器读取曲线…': 'Reading curves from the Python encoder…',
+  '编码曲线读取失败': 'Failed to load encoding curves',
+  'L = 0，仅保留原始输入坐标': 'L = 0: only raw input coordinates remain',
+  '频带 {band} 的正弦和余弦': 'Sine and cosine for band {band}',
+
+  '分层采样诊断': 'Hierarchical sampling diagnostics',
+  '区分逐射线采样数值与既有验证图；不从图片反推训练数据。': 'Distinguishes saved per-ray values from validation figures. Training data is never inferred from images.',
+  '逐射线数值已保存': 'Per-ray values saved',
+  '逐射线数值未保存': 'Per-ray values not saved',
+  '逐射线采样数值暂无数据': 'Per-ray sampling values unavailable',
+  '50k 基线没有保存 coarse/fine depths、density、alpha、weights 或 transmittance 的逐射线记录。': 'The 50k baseline did not save per-ray coarse/fine depths, density, alpha, weights or transmittance.',
+  '已有采样验证图': 'Existing sampling validation figures',
+  '{count} 张 · 非逐射线数值': '{count} images · not per-ray values',
+  '项目原有分层采样验证图 {index}': 'Existing project sampling validation figure {index}',
+  '验证图 {index}': 'Validation figure {index}',
+  '项目既有验证产物': 'Existing project validation artifact',
+  '暂无可用验证图': 'No validation figures available',
+  '其他已登记产物': 'Other registered artifacts',
+  '{artifacts} 件 · {checkpoints} 个检查点': '{artifacts} artifacts · {checkpoints} checkpoints',
+  '产物 {index}': 'Artifact {index}',
+  '暂无可用产物': 'No artifacts available',
+  '从真实检查点按需重算单条射线；不会修改科研产物。': 'Recompute a single ray on demand from a real checkpoint without changing research artifacts.',
+  '单射线检查台': 'Single-ray inspector',
+  '按需确定性推理 · 非训练期记录': 'Deterministic on-demand inference · not a training-time record',
+  '检查点 A': 'Checkpoint A',
+  '检查点 B': 'Checkpoint B',
+  '划分': 'Split',
+  '两个检查点按顺序在 CPU 上读取同一像素。每次读取真实模型权重，可能需要几秒。': 'The same pixel is read from two checkpoints in sequence on the CPU. Each request loads real model weights and may take a few seconds.',
+  '正在重算真实射线…': 'Recomputing real ray…',
+  '读取并对比射线': 'Inspect and compare rays',
+  '单射线读取失败': 'Ray inspection failed',
+  '检查点射线对照': 'Checkpoint ray comparison',
+  '显示量': 'Displayed quantity',
+  '正在读取第二个检查点…': 'Reading the second checkpoint…',
+  '这些数值从冻结配置和对应 checkpoint 重新推理，未在原训练中保存。密度与细网络合并采样深度一一对应。': 'These values were recomputed from the frozen configuration and checkpoints; they were not saved during the original training. Fine-network densities align with combined sample depths.',
+  '粗采样深度': 'Coarse sample depths',
+  '新增细采样深度': 'New fine sample depths',
+  '深度 t 为射线参数，不是物理世界距离。细网络在合并并排序后的深度上计算。': 'Depth t is the ray parameter, not a physical world distance. The fine network runs at merged, sorted depths.',
+  '{count} 个样本': '{count} samples',
+  '{stage} 的 {metric} 曲线': '{metric} trace for {stage}',
+  '预测 RGB': 'Predicted RGB',
+  '累积不透明度': 'Accumulated opacity',
+  'CPU 只读重算': 'CPU read-only recomputation',
+  '收起产物列表': 'Collapse artifact list',
+  '显示全部 {count} 件产物': 'Show all {count} artifacts',
+  'density': 'Density',
+  'alpha': 'Alpha',
+  'weights': 'Weights',
+  'transmittance': 'Transmittance',
+  'Pixel X': 'Pixel X',
+  'Pixel Y': 'Pixel Y',
+
+  '3D 渲染不可用。右侧真实相机列表和数值仍可使用。': '3D rendering is unavailable. The real camera list and values remain available.',
+  '经验证的相机数据尚不可用。3D 视图不会在浏览器端推测相机坐标。': 'Validated camera data is unavailable. The 3D view will not infer camera coordinates in the browser.',
+  '{shown} / {total} 台相机 · {convention}': '{shown} / {total} cameras · {convention}',
+  '全部视锥': 'All frustums',
+  'Lego 相机位置、方向、视锥与选中射线的三维视图': '3D view of Lego camera positions, directions, frustums and selected ray',
+  '左键旋转 / 滚轮缩放 / 右键平移': 'Left drag to orbit / wheel to zoom / right drag to pan',
+  '● 相机': '● Camera',
+  '◇ 原点': '◇ Origin',
+  '━ 选中射线': '━ Selected ray',
+  '相机检视': 'Camera inspector',
+  '世界位置': 'World position',
+  '前向方向': 'Forward direction',
+  '射线来源': 'Ray source',
+  '像素 {pixel}': 'Pixel {pixel}',
+  '中心像素': 'Center pixel',
+  '位置、方向及四角射线由 Python 端按 Step 1 约定计算。图中射线长度只用于空间显示。': 'Position, direction and corner rays are computed in Python using the Step 1 convention. Displayed ray length is for spatial visualization only.',
+  '像素射线': 'Pixel ray',
+  '读取': 'Read',
+  '相机索引': 'Camera index',
+  '显示前 {shown} / {total} 项，搜索编号可定位其余视角': 'Showing first {shown} of {total}; search by index to find other views',
+  '{count} 项': '{count} items',
+  '数据集划分': 'Dataset split',
+  '全部': 'All',
+  '搜索相机': 'Search cameras',
+  '按划分或编号查找': 'Find by split or index',
+  '选择相机': 'Select camera',
+  '无匹配相机，调整筛选或搜索。': 'No matching cameras. Adjust the filter or search.',
+
+  // Existing English labels are technical terms in both languages; these
+  // optional overrides make mixed-language controls consistent in Chinese.
+  'Scene': 'Scene',
+  'Dataset root': 'Dataset root',
+  'White background': 'White background',
+  'Iteration': 'Iteration',
+  'VIEW': 'VIEW',
+}
+
+export const chineseOverrides: Record<string, string> = {
+  'Scene': '场景',
+  'Dataset root': '数据集根目录',
+  'White background': '白色背景',
+  'Iteration': '迭代',
+  'VIEW': '视角',
+  'density': '密度',
+  'alpha': '不透明度 α',
+  'weights': '权重',
+  'transmittance': '透射率',
+  'Pixel X': '像素 X',
+  'Pixel Y': '像素 Y',
+}
+
+let currentLanguage: Language | null = null
+const listeners = new Set<() => void>()
+
+function defaultLanguage(): Language {
+  if (typeof window === 'undefined') return 'en'
+  try {
+    const saved = window.localStorage.getItem(STORAGE_KEY)
+    if (saved === 'zh' || saved === 'en') return saved
+  } catch {
+    // Storage can be disabled; the interface still follows system language.
+  }
+  return /^zh(?:-|$)/i.test(window.navigator.language || '') ? 'zh' : 'en'
+}
+
+export function getLanguage(): Language {
+  if (currentLanguage === null) {
+    currentLanguage = defaultLanguage()
+    if (typeof window !== 'undefined') window.document.documentElement.lang = currentLanguage === 'zh' ? 'zh-CN' : 'en'
+  }
+  return currentLanguage
+}
+
+export function setLanguage(next: Language): void {
+  if (next !== 'zh' && next !== 'en') throw new Error('Unsupported language')
+  const changed = getLanguage() !== next
+  currentLanguage = next
+  if (typeof window !== 'undefined') {
+    try { window.localStorage.setItem(STORAGE_KEY, next) } catch { /* in-memory fallback */ }
+    window.document.documentElement.lang = next === 'zh' ? 'zh-CN' : 'en'
+  }
+  if (changed) listeners.forEach(listener => listener())
+}
+
+export function t(key: string, params: TranslationParams = {}): string {
+  const translated = getLanguage() === 'en' ? (english[key] ?? key) : (chineseOverrides[key] ?? key)
+  return translated.replace(/\{([a-zA-Z][a-zA-Z0-9_]*)\}/g, (match, name: string) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : match)
+}
+
+function subscribe(listener: () => void): () => void {
+  listeners.add(listener)
+  return () => { listeners.delete(listener) }
+}
+
+export function useI18n(): { language: Language; setLanguage: typeof setLanguage; t: typeof t } {
+  const language = useSyncExternalStore<Language>(subscribe, getLanguage, () => 'en')
+  return { language, setLanguage, t }
+}
+
+// Keep another open console tab in sync with a language switch.
+if (typeof window !== 'undefined') {
+  currentLanguage = defaultLanguage()
+  window.document.documentElement.lang = currentLanguage === 'zh' ? 'zh-CN' : 'en'
+  window.addEventListener('storage', event => {
+    if (event.key !== STORAGE_KEY || (event.newValue !== 'zh' && event.newValue !== 'en')) return
+    if (currentLanguage === event.newValue) return
+    currentLanguage = event.newValue
+    window.document.documentElement.lang = event.newValue === 'zh' ? 'zh-CN' : 'en'
+    listeners.forEach(listener => listener())
+  })
+}

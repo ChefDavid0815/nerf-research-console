@@ -1,0 +1,32 @@
+# Research baseline. Step 3 adds explicit ray bounds and operational settings
+# without changing any Step 1/2 scientific values. An EE sweep is not run here.
+scene: lego
+dataset_root: data/nerf_synthetic
+image_resolution: original
+white_background: true
+normalize_ray_directions: false
+
+position_encoding_L: 10
+direction_encoding_L: 4
+network_depth: 8
+network_width: 256
+skip_connection_layer: 4
+view_width: 128
+num_coarse_samples: 64
+num_fine_samples: 128
+batch_size: 4096
+learning_rate: 0.0005
+training_iterations: 500000
+random_seed: 0
+density_initial_bias: 0.1
+near: 2.0
+far: 6.0
+learning_rate_decay_steps: 250000
+learning_rate_decay_factor: 0.1
+ray_chunk_size: 256
+render_chunk_size: 512
+checkpoint_interval: 10000
+preview_interval: 10000
+preview_width: 100
+preview_height: 100
+progress_interval: 100

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "recorded_at": "2026-09-30",
+  "run_id": "step3_smoke_20260924T165838Z_f3bbd1f5",
+  "checkpoint_iteration": 50000,
+  "checkpoint_sha256": "0e564e02fc28875a7fde02fa55682566342f06d1252fbbcab5d6581278dd3264",
+  "batch_size": 256,
+  "scene": "lego",
+  "position_encoding_L": 10,
+  "direction_encoding_L": 4,
+  "coarse_samples": 64,
+  "fine_samples": 128,
+  "white_background": true,
+  "preview_resolution": [
+    100,
+    100
+  ],
+  "evaluation_resolution": [
+    800,
+    800
+  ],
+  "evaluation_summary": [
+    {
+      "iteration": "50000",
+      "split": "test",
+      "view_count": "5",
+      "view_indices": "0;1;2;66;133",
+      "psnr_mean": "26.055417431734128",
+      "psnr_median": "26.376995499651418",
+      "psnr_std": "0.6644811627510802",
+      "ssim_mean": "0.8902188335031511",
+      "ssim_median": "0.8851203989136428",
+      "ssim_std": "0.008760876630561696",
+      "lpips_mean": "0.09240402579307556",
+      "lpips_median": "0.09518835693597794",
+      "lpips_std": "0.007817125608862104"
+    },
+    {
+      "iteration": "50000",
+      "split": "train",
+      "view_count": "3",
+      "view_indices": "0;1;2",
+      "psnr_mean": "27.557577699248743",
+      "psnr_median": "27.372170444544967",
+      "psnr_std": "0.6134310441112335",
+      "ssim_mean": "0.9043239195389191",
+      "ssim_median": "0.9050057261734313",
+      "ssim_std": "0.003049551799683049",
+      "lpips_mean": "0.08058628439903259",
+      "lpips_median": "0.07932358980178833",
+      "lpips_std": "0.005352354223382166"
+    },
+    {
+      "iteration": "50000",
+      "split": "val",
+      "view_count": "3",
+      "view_indices": "0;1;2",
+      "psnr_mean": "27.333392102527466",
+      "psnr_median": "27.036666947653604",
+      "psnr_std": "0.49132178860661463",
+      "ssim_mean": "0.8885021935227136",
+      "ssim_median": "0.8893439188979831",
+      "ssim_std": "0.002276047952858661",
+      "lpips_mean": "0.08770141750574112",
+      "lpips_median": "0.09264814853668213",
+      "lpips_std": "0.01193483620068644"
+    }
+  ],
+  "note": "A 256-ray continuation of an engineering smoke run. Selected views only; not a full-dataset benchmark or bandwidth comparison."
+}

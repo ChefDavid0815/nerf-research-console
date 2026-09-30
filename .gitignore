@@ -1,0 +1,43 @@
+# Local environments and build output
+.venv/
+venv/
+node_modules/
+console_frontend/dist/
+console_frontend/release/
+console_frontend/release*/
+*.exe
+*.dll
+*.asar
+*.pak
+*.bin
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+.env
+.env.*
+!.env.example
+
+# Research records remain local. Curated evidence is in docs/evidence.
+data/*
+!data/PROVENANCE.md
+runs/
+artifacts/
+*.pt
+*.pth
+*.ckpt
+*.npy
+*.npz
+*.zip
+*.log
+*.bak
+*.previous
+console_frontend/*.png
+
+# OS and editor state
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

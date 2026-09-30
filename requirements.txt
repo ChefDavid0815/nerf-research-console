@@ -1,0 +1,16 @@
+# Python 3.12; CUDA 12.8 build for this Windows/NVIDIA research machine.
+# The exact torch build is selected to avoid an accidental CPU-only install.
+--extra-index-url https://download.pytorch.org/whl/cu128
+torch==2.8.0+cu128
+torchvision==0.23.0+cu128
+numpy==2.2.6
+Pillow==11.3.0
+matplotlib==3.10.6
+PyYAML==6.0.2
+pytest==8.4.2
+scikit-image==0.26.0
+lpips==0.1.4
+fastapi==0.117.1
+uvicorn==0.36.0
+httpx==0.28.1
+psutil==7.2.2

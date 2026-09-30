@@ -1,0 +1,39 @@
+.sampling-page { display: grid; gap: 16px; }
+.ray-controls .panel-heading h3 { display: inline-flex; align-items: center; gap: 8px; }
+.ray-controls .panel-heading h3 svg { color: #9affbc; filter: drop-shadow(0 0 7px #75e7a8); }
+.ray-control-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.ray-control-grid label { display: flex; flex-direction: column; gap: 7px; color: #95b7a1; font: 10px var(--mono); }
+.ray-control-grid input, .ray-control-grid select { width: 100%; min-width: 0; height: 37px; padding: 0 9px; border: 1px solid #365e43; border-radius: 2px; background: #091811; color: #d8f8e0; font: 11px var(--mono); }
+.ray-control-foot { display: flex; justify-content: space-between; align-items: center; gap: 18px; margin-top: 17px; }
+.ray-control-foot p { max-width: 560px; margin: 0; color: #8fb19a; font-size: 11px; line-height: 1.55; }
+.ray-analysis { background: radial-gradient(circle at 97% 0%, #205d373a, transparent 40%), linear-gradient(145deg, #11231a, #0b1711); }
+.ray-metric-switch { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; }
+.ray-metric-switch button { padding: 7px 12px; border: 1px solid #345940; border-radius: 2px; background: #0b1c12; color: #9ab9a0; font: 11px var(--mono); transition: color .2s, box-shadow .2s, border-color .2s; }
+.ray-metric-switch button:hover, .ray-metric-switch button.active { border-color: var(--trace-tone); color: #e1f8e6; box-shadow: inset 0 -2px var(--trace-tone), 0 0 15px #75f6a21c; }
+.ray-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; }
+.ray-result, .ray-waiting { min-width: 0; padding: 14px; border: 1px solid #31523d; background: #07150e9e; }
+.ray-waiting { display: grid; place-items: center; color: #9dc8a8; font: 11px var(--mono); }
+.ray-result-top { display: grid; grid-template-columns: .8fr 1.3fr .9fr; gap: 8px; padding-bottom: 13px; border-bottom: 1px solid #284a34; }
+.ray-result-top>div { min-width: 0; }
+.ray-result-top span { display: block; margin-bottom: 6px; color: #85aa91; font: 9px var(--mono); }
+.ray-result-top strong { color: #ccffda; font: 11px var(--mono); overflow-wrap: anywhere; }
+.ray-depth-rail { padding: 13px 0 9px; }
+.ray-depth-rail>div { display: grid; grid-template-columns: 94px minmax(0, 1fr) 32px; align-items: center; gap: 9px; margin-bottom: 9px; }
+.ray-depth-rail span, .ray-depth-rail b { color: #a8ceb0; font: 9px var(--mono); }
+.ray-depth-rail b { text-align: right; }
+.ray-depth-track { position: relative; height: 17px; border-bottom: 1px solid #447653; background: #0d2417; overflow: hidden; }
+.ray-depth-track i { position: absolute; bottom: 0; height: 9px; width: 1px; background: #9ef2b8; box-shadow: 0 0 4px #98ffc0; }
+.ray-depth-track i.fine { background: #85dcda; box-shadow: 0 0 4px #70f5e8; }
+.ray-depth-rail>small { display: block; color: #789c84; line-height: 1.45; }
+.ray-trace { border-top: 1px solid #26452f; padding-top: 9px; margin-top: 7px; }
+.ray-trace-head { display: flex; justify-content: space-between; align-items: center; color: #c9efcf; font: 10px var(--mono); }
+.ray-trace-head span { color: #8bac94; }
+.ray-trace svg { display: block; width: 100%; height: auto; margin-top: 5px; background: linear-gradient(180deg, #12281a64, transparent); }
+.ray-trace svg text { fill: #729f7c; font: 10px var(--mono); }
+.ray-source { margin: 12px 0 0; color: #7fae89; font: 9px var(--mono); overflow-wrap: anywhere; }
+.ray-integrity-note { margin: 16px 0 0; color: #9cbaa2; font-size: 11px; line-height: 1.6; }
+.ray-artifact-more { margin-top: 14px; border: 1px solid #487450; background: #10251a; color: #bbf4ca; padding: 8px 12px; font: 11px var(--mono); }
+.ray-artifact-more:hover { background: #1a3e29; }
+@media (max-width: 1100px) { .ray-control-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 800px) { .ray-comparison { grid-template-columns: 1fr; } }
+@media (max-width: 560px) { .ray-control-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ray-control-foot { align-items: stretch; flex-direction: column; } .ray-result-top { grid-template-columns: 1fr 1fr; } }
